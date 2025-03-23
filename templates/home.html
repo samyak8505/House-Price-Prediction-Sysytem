@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Prediction</title>
+</head>
+<body>
+    <h1>House Prediction Form</h1>
+    <div class="input_form">
+        <form action="{{ url_for('predict_datapoint') }}" method="post" id="predictionForm">
+            <!-- Input fields with values populated from request.form after submission -->
+            <label for="area">Area:</label>
+            <input type="number" id="area" name="area" placeholder="Enter the area in sqft" required value="{{ request.form['area'] if 'area' in request.form else '' }}"><br><br>
+
+            <label for="bedrooms">Bedrooms:</label>
+            <input type="number" id="bedrooms" name="bedrooms" placeholder="Enter the Number of Bedrooms" required value="{{ request.form['bedrooms'] if 'bedrooms' in request.form else '' }}"><br><br>
+
+            <label for="bathrooms">Bathrooms:</label>
+            <input type="number" id="bathrooms" name="bathrooms" placeholder="Enter the Number of Bathrooms" required value="{{ request.form['bathrooms'] if 'bathrooms' in request.form else '' }}"><br><br>
+
+            <label for="stories">Stories:</label>
+            <input type="number" id="stories" name="stories" placeholder="Enter the Number of Stories(Floors)" required value="{{ request.form['stories'] if 'stories' in request.form else '' }}"><br><br>
+            
+            <label for="mainroad">Main Road:</label>
+            <select id="mainroad" name="mainroad" required>
+                <option value="" disabled selected>Select if the house is on the main road</option>
+                <option value="yes" {% if request.form.get('mainroad') == 'yes' %}selected{% endif %}>Yes</option>
+                <option value="no" {% if request.form.get('mainroad') == 'no' %}selected{% endif %}>No</option>
+            </select><br><br>
+
+            <label for="guestroom">Guestroom:</label>
+            <select id="guestroom" name="guestroom" required>
+                <option value="" disabled selected>Select if the house has a guestroom</option>
+                <option value="yes" {% if request.form.get('guestroom') == 'yes' %}selected{% endif %}>Yes</option>
+                <option value="no" {% if request.form.get('guestroom') == 'no' %}selected{% endif %}>No</option>
+            </select><br><br>
+
+            <label for="basement">Basement:</label>
+            <select id="basement" name="basement" required>
+                <option value="" disabled selected>Select if the house has a basement</option>
+                <option value="yes" {% if request.form.get('basement') == 'yes' %}selected{% endif %}>Yes</option>
+                <option value="no" {% if request.form.get('basement') == 'no' %}selected{% endif %}>No</option>
+            </select><br><br>
+
+            <label for="hotwaterheating">Hot Water Heating:</label>
+            <select id="hotwaterheating" name="hotwaterheating" required>
+                <option value="" disabled selected>Select if the house has hot water heating</option>
+                <option value="yes" {% if request.form.get('hotwaterheating') == 'yes' %}selected{% endif %}>Yes</option>
+                <option value="no" {% if request.form.get('hotwaterheating') == 'no' %}selected{% endif %}>No</option>
+            </select><br><br>
+
+            <label for="airconditioning">Air Conditioning:</label>
+            <select id="airconditioning" name="airconditioning" required>
+                <option value="" disabled selected>Select if the house has air conditioning</option>
+                <option value="yes" {% if request.form.get('airconditioning') == 'yes' %}selected{% endif %}>Yes</option>
+                <option value="no" {% if request.form.get('airconditioning') == 'no' %}selected{% endif %}>No</option>
+            </select><br><br>
+
+            <label for="parking">Parking:</label>
+            <input type="number" name="parking" id="parking" placeholder="Enter the number of parkings" required value="{{ request.form['parking'] if 'parking' in request.form else '' }}"><br><br>
+
+            <label for="prefarea">Preferred Area:</label>
+            <select id="prefarea" name="prefarea" required>
+                <option value="" disabled selected>Select if the property is in a preferred area</option>
+                <option value="yes" {% if request.form.get('prefarea') == 'yes' %}selected{% endif %}>Yes</option>
+                <option value="no" {% if request.form.get('prefarea') == 'no' %}selected{% endif %}>No</option>
+            </select><br><br>
+
+            <label for="furnishingstatus">Furnishing Status:</label>
+            <select id="furnishingstatus" name="furnishingstatus" required>
+                <option value="" disabled selected>Select furnishing status</option>
+                <option value="furnished" {% if request.form.get('furnishingstatus') == 'furnished' %}selected{% endif %}>Furnished</option>
+                <option value="semi-furnished" {% if request.form.get('furnishingstatus') == 'semi-furnished' %}selected{% endif %}>Semi-furnished</option>
+                <option value="unfurnished" {% if request.form.get('furnishingstatus') == 'unfurnished' %}selected{% endif %}>Unfurnished</option>
+            </select><br><br>
+
+            <!-- Submit and Clear buttons -->
+            <button type="submit">Submit</button>
+            <button type="button" id="clearButton">Clear</button>
+        </form>
+    </div>
+
+    <!-- Display Prediction Result Only After Submission -->
+    {% if result is defined and result is not none %}
+    <h2>The house prediction is: {{ result }}</h2>
+    {% endif %}
+
+    <!-- JavaScript to Handle Clearing Form Fields -->
+    <script>
+        document.getElementById('clearButton').addEventListener('click', function() {
+            // Clear input fields
+            document.querySelectorAll('input').forEach(input => input.value = '');
+            
+            // Clear all select dropdowns
+            document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+            
+            // Hide prediction result if any
+            const predictionResult = document.querySelector('h2');
+            if (predictionResult) {
+                predictionResult.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
